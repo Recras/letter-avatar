@@ -82,37 +82,23 @@ class LetterAvatar
         $this->foregroundColor = $foregroundColor;
         return $this;
     }
-    
-    /**
-     * @param string $name
-     */
-    private function setName(string $name)
+
+    private function setName(string $name): void
     {
         $this->name = $name;
     }
 
-
-    /**
-     * @param ImageManager $imageManager
-     */
-    private function setImageManager(ImageManager $imageManager)
+    private function setImageManager(ImageManager $imageManager): void
     {
         $this->imageManager = $imageManager;
     }
 
-    /**
-     * @param string $shape
-     */
-    private function setShape(string $shape)
+    private function setShape(string $shape): void
     {
         $this->shape = $shape;
     }
 
-
-    /**
-     * @param int $size
-     */
-    private function setSize(int $size)
+    private function setSize(int $size): void
     {
         $this->size = $size;
     }
