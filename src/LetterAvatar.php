@@ -26,9 +26,9 @@ class LetterAvatar
 
     private ImageManager $imageManager;
 
-    private string $backgroundColor;
+    private string $backgroundColor = '';
 
-    private string $foregroundColor;
+    private string $foregroundColor = '';
 
     /**
      * LetterAvatar constructor.
