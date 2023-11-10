@@ -18,43 +18,17 @@ class LetterAvatar
      */
     const MIME_TYPE_JPEG = 'image/jpeg';
 
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
+    private string $shape;
 
-    /**
-     * @var string
-     */
-    private $nameInitials;
+    private int $size;
 
+    private ImageManager $imageManager;
 
-    /**
-     * @var string
-     */
-    private $shape;
+    private string $backgroundColor;
 
-
-    /**
-     * @var int
-     */
-    private $size;
-
-    /**
-     * @var ImageManager
-     */
-    private $imageManager;
-
-    /**
-     * @var string
-     */
-    private $backgroundColor;
-
-    /**
-     * @var string
-     */
-    private $foregroundColor;
+    private string $foregroundColor;
 
     /**
      * LetterAvatar constructor.
@@ -72,11 +46,8 @@ class LetterAvatar
 
     /**
      * color in RGB format (example: #FFFFFF)
-     * 
-     * @param $backgroundColor
-     * @param $foregroundColor
      */
-    public function setColor($backgroundColor, $foregroundColor)
+    public function setColor(string $backgroundColor, string $foregroundColor): self
     {
         $this->backgroundColor = $backgroundColor;
         $this->foregroundColor = $foregroundColor;
@@ -103,15 +74,11 @@ class LetterAvatar
         $this->size = $size;
     }
 
-
-    /**
-     * @return \Intervention\Image\Image
-     */
     private function generate(): \Intervention\Image\Image
     {
         $isCircle = $this->shape === 'circle';
 
-        $this->nameInitials = $this->getInitials($this->name);
+        $nameInitials = $this->getInitials($this->name);
         $this->backgroundColor = $this->backgroundColor ?: $this->stringToColor($this->name);
         $this->foregroundColor = $this->foregroundColor ?: '#fafafa';
 
@@ -124,7 +91,7 @@ class LetterAvatar
 
         }
 
-        $canvas->text($this->nameInitials, 240, 240, function (Font $font) {
+        $canvas->text($nameInitials, 240, 240, function (Font $font) {
             $font->file(__DIR__ . '/fonts/arial-bold.ttf');
             $font->size(220);
             $font->color($this->foregroundColor);
@@ -135,10 +102,6 @@ class LetterAvatar
         return $canvas->resize($this->size, $this->size);
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
     private function getInitials(string $name): string
     {
         $nameParts = $this->break_name($name);
@@ -153,10 +116,6 @@ class LetterAvatar
 
     }
 
-    /**
-     * @param string $word
-     * @return string
-     */
     private function getFirstLetter(string $word): string
     {
         return mb_strtoupper(trim(mb_substr($word, 0, 1, 'UTF-8')));
@@ -164,12 +123,8 @@ class LetterAvatar
 
     /**
      * Get the generated Letter-Avatar as a png or jpg string
-     *
-     * @param string $mimetype
-     * @param int    $quality
-     * @return string
      */
-    public function encode($mimetype = self::MIME_TYPE_PNG, $quality = 90): string
+    public function encode(string $mimetype = self::MIME_TYPE_PNG, int $quality = 90): string
     {
         $allowedMimeTypes = [
             self::MIME_TYPE_PNG,
@@ -183,13 +138,8 @@ class LetterAvatar
 
     /**
      * Save the generated Letter-Avatar as a file
-     *
-     * @param        $path
-     * @param string $mimetype
-     * @param int    $quality
-     * @return bool
-     */
-    public function saveAs($path, $mimetype = self::MIME_TYPE_PNG, $quality = 90): bool
+      */
+    public function saveAs(string $path = null, string $mimetype = self::MIME_TYPE_PNG, int $quality = 90): bool
     {
         if (empty($path)) {
             return false;
@@ -198,9 +148,6 @@ class LetterAvatar
         return \is_int(@file_put_contents($path, $this->encode($mimetype, $quality)));
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string)$this->generate()->encode('data-url');
@@ -222,10 +169,6 @@ class LetterAvatar
         return array_values($words);
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     private function stringToColor(string $string): string
     {
         $crc = hash('crc32b', $string);
