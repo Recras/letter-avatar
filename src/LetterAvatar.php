@@ -3,8 +3,7 @@
 namespace YoHang88\LetterAvatar;
 
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Gd\Font;
-use Intervention\Image\Gd\Shapes\CircleShape;
+use Intervention\Image\Geometry\Factories\CircleFactory;
 use Intervention\Image\ImageManager;
 
 class LetterAvatar
@@ -86,16 +85,15 @@ class LetterAvatar
         $canvas = $this->imageManager->create(480, 480);
 
         if ($isCircle) {
-            $canvas->drawCircle(240, 240, function ($draw) {
+            $canvas->drawCircle(240, 240, function (CircleFactory $draw) {
                 $draw->diameter(480);
                 $draw->background($this->backgroundColor);
             });
-
         } else {
             $canvas->fill($this->backgroundColor);
         }
 
-        $canvas->text($this->nameInitials, 240, 240, function ($font) {
+        $canvas->text($nameInitials, 240, 240, function ($font) {
             $font->filename(__DIR__ . '/fonts/arial-bold.ttf');
             $font->size(220);
             $font->color($this->foregroundColor);
@@ -135,7 +133,7 @@ class LetterAvatar
             self::MIME_TYPE_JPEG,
         ];
         if(!in_array($mimetype, $allowedMimeTypes, true)) {
-            throw new InvalidArgumentException('Invalid mimetype');
+            throw new \InvalidArgumentException('Invalid mimetype');
         }
         return $this->generate()->encodeByMediaType($mimetype, $quality);
     }
@@ -186,5 +184,4 @@ class LetterAvatar
         $B = sprintf('%02X', floor(hexdec($B16) / $darker));
         return '#' . $R . $G . $B;
     }
-
 }
