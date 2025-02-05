@@ -141,7 +141,7 @@ class LetterAvatar
     /**
      * Save the generated Letter-Avatar as a file
       */
-    public function saveAs(string $path = null, string $mimetype = self::MIME_TYPE_PNG, int $quality = 90): bool
+    public function saveAs(string $path, string $mimetype = self::MIME_TYPE_PNG, int $quality = 90): bool
     {
         if (empty($path)) {
             return false;
@@ -152,7 +152,7 @@ class LetterAvatar
 
     public function __toString(): string
     {
-        return (string)$this->generate()->toPng()->toDataUri();
+        return $this->generate()->toPng()->toDataUri();
     }
 
     /**
